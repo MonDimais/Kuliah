@@ -11,10 +11,6 @@ struct buku
     string jenisb;
     int stok;
 };
-struct node{
-    string judul;
-    node* next;
-};
 buku gudang[5][10000];
 //0 = Komik, 1 = Novel, 2 = Buku Pelajaran, 3 = Buku Keagamaan, 4 = Lainnya
 string clear;
@@ -80,13 +76,17 @@ void output()
             {
                 for(int j = 0; j < ulang; j++)
                 {
-                    if(gudang[i][j].stok != 0){
+                    if(gudang[i][j].stok != 0 ){
                         cout << "\n\t[" << gudang[i][j].judul << "] - " << gudang[i][j].pengarang;
                         cout << endl;
-                    }
-                    
+                        
+                    }   
                 }
             }
+            cout << "\n\n\t\tClear?...\n\t\t";
+            cin >> clear;
+            system("cls");
+            return;
         } else {
             cout << "\n\tBelum Ada Data Yang Di input Sama Sekali";
             cout << "\n\n\t\tClear?...\n\t\t";
@@ -133,12 +133,12 @@ void output()
 
             for(int i = 0; i < num; i++)
             {
-                cout << "\t[" << gudang[jeanis][i].judul << "] - " << gudang[jeanis][i].pengarang;
-                cout << "\n\n\t\tClear?...\n\t\t";
-                cin >> clear;
-                system("cls");
-                break;
+                cout << "\t[" << gudang[jeanis][i].judul << "] - " << gudang[jeanis][i].pengarang << endl;
             }
+            cout << "\n\n\t\tClear?...\n\t\t";
+            cin >> clear;
+            system("cls");
+            return;
         } else {
             cout << "\n\tBelum Ada Data Yang Di input Sama Sekali";
             cout << "\n\n\t\tClear?...\n\t\t";
@@ -170,7 +170,7 @@ void output()
                         cout << "\n\n\t\tClear?...\n\t\t";
                         cin >> clear;
                         system("cls");
-                        break;
+                        return;
                     }
                     
                 }
@@ -209,8 +209,8 @@ void hapus()
             {
                 if(cari == gudang[i][j].judul){
                     gudang[i][j].stok = 0;
-                    for(int j = i; j < ulang - 1; j++){
-                        gudang[i][j] = gudang[i][j + 1];
+                    for(int k = j; k < ulang - 1; k++){
+                        gudang[i][k] = gudang[i][k + 1];
                     } if(i == 0){
                         numK -=1;
                     } else if(i == 1){
@@ -245,68 +245,69 @@ void hapus()
     system("cls");
 }
 
-void ambil(node** head, string judlnew)
+void ambil()
 {
-    node* newNode = new node();
-    node* last = *head;
-    newNode -> judul = judlnew;
-    newNode -> next = nullptr;
-
-    if(*head == nullptr) {
-        *head = newNode;
+    string cari;
+    int ulang;
+    int kurang;
+    int hitung;
+    int ulangi = numK + numN + numP + numA + numL;
+    if(ulang != 0){
+        cout << "\tMasukkan Jumlah Buku Yang Ingin Diambil Stoknya : ";
+        cin >> ulang;
+        cin.ignore();
+            for (int i = 0; i < ulang; i++)
+            {
+                cout << "\tMasukkan Judul Buku Ke - " << i + 1 << " : ";
+                getline(cin, cari);
+                for(int i = 0; i < 5; i++)
+                {
+                    for(int j = 0; j < ulangi; j++)
+                    {
+                        if(cari == gudang[i][j].judul){
+                            cout << "\tBerapa Banyak Kamu Ingin Mengambil Buku : ";
+                            cin >> kurang;
+                            cin.ignore();
+                            gudang[i][j].stok = kurang;
+                            cout << "\tStok Buku " << cari << " Sudah Dikurang " << kurang << endl << endl;
+                            hitung +=1;
+                        }
+                    }
+                }
+            }
+            
+        if(hitung < ulang){
+                cout << "\tMaaf " << ulang - hitung << " Data Buku Tidak Ditemukan";
+        }
+        cout << "\n\n\t\tClear?...\n\t\t";
+        cin >> clear;
+        system("cls");
+        return;
+    } else {
+        cout << "\n\tBelum Ada Data Yang Di input Sama Sekali";
+        cout << "\n\n\t\tClear?...\n\t\t";
+        cin >> clear;
+        system("cls");
         return;
     }
-
-    while(last -> next != nullptr){
-        last = last -> next;
-    }
-
-    last -> next = newNode;
-}
-
-void outambil(node* nodes, int ambil) {
-    while (nodes != nullptr) {
-        cout << "\tStok Buku " << nodes -> judul << " Sudah Dikurangi " << ambil << endl;
-        nodes = nodes -> next;
-    }
-    cout << endl;
 }
 
 int main()
 {
-    node* head = nullptr;
-    string judl;
-    int ulang;
-    int hitung;
-    int ambill;
     int pilih;
-    int trial = 0;
 
     while (true)
     {
-        if(trial == 0){
-            cout << "\t\tMenu Pilihan\n\n";
-            cout << "\t0. Keluar Dari Program\n";
-            cout << "\t1. Masukkan Data Buku\n";
-            cout << "\t2. Menampilkan Data Buku\n";
-            cout << "\t3. Menghapus Data Buku\n";
-            cout << "\t4. Mengambil Stok Buku\n";
-            cout << "\n\n\t\tPilih Angka : ";
-            cin >> pilih;
-            cin.ignore();
-            cout << endl;
-        } else {
-            cout << "\t\tMenu Pilihan\n\n";
-            cout << "\t0. Keluar Dari Program\n";
-            cout << "\t1. Masukkan Data Buku\n";
-            cout << "\t2. Menampilkan Data Buku\n";
-            cout << "\t3. Menghapus Data Buku\n";
-            cout << "\n\n\t\tPilih Angka : ";
-            cin >> pilih;
-            cin.ignore();
-            cout << endl;
-        }
-        
+        cout << "\t\tMenu Pilihan\n\n";
+        cout << "\t0. Keluar Dari Program\n";
+        cout << "\t1. Masukkan Data Buku\n";
+        cout << "\t2. Menampilkan Data Buku\n";
+        cout << "\t3. Menghapus Data Buku\n";
+        cout << "\t4. Mengambil Stok Buku\n";
+        cout << "\n\n\t\tPilih Angka : ";
+        cin >> pilih;
+        cin.ignore();
+        cout << endl;
 
         if (pilih == 0){
             break;
@@ -348,39 +349,9 @@ int main()
                 break;
 
             case 4:
-                cout << "\tMasukkan Jumlah Buku Yang Ingin Diambil Stoknya : ";
-                cin >> ulang;
-                cin.ignore();
-                for (int i = 0; i < ulang; i++)
-                {
-                    cout << "\tMasukkan Judul Buku Ke - " << i + 1 << " : ";
-                    getline(cin, judl);
-                    for(int i = 0; i < 5; i++)
-                    {
-                        for(int j = 0; j < ulang; j++)
-                        {
-                            if(judl == gudang[i][j].judul){
-                                    cout << "\tBerapa Banyak Kamu ingin Mengambil Buku : ";
-                                    cin >> ambill;
-                                    gudang[i][j].stok -= ambill;
-                                    ambil(&head, judl);
-                                    hitung +=1;
-                                    break;
-                            }
-                        }
-                    }
-                }
-                cout << endl;
-                outambil(head, ambill);
-                if(hitung < ulang){
-                    cout << "\tMaaf " << ulang - hitung << " Data Buku Tidak Ditemukan";
-                }
-                trial += 1;
-                cout << "\n\n\t\tClear?...\n\t\t";
-                cin >> clear;
-                system("cls");
+                ambil();
                 break;
-            
+                
             default:
                 cout << "\tTolong Input Data Dengan Benar";
                 break;
